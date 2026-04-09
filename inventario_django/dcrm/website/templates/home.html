@@ -1,4 +1,31 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Tengo un señor sueño</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-body">
+                    {% if user.is_authenticated %}
+                        <h3 class="text-center mb-4">Bienvenidos a mi sistema</h3>
+                    {% else %}
+                        <h1 class="text-center mb-4">Ingrese al sistema</h1>
+                        <form method="post" action="{% url 'home' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="" class="form-label">Ingrese sus datos</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Aca va el nombre">
+                                    <label for="" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" name="password" placeholder="Aca la contraseña">
+                                    <br>
+                                    <button class="btn btn-outline-success">Guardar</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
