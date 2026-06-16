@@ -14,7 +14,8 @@ from django.contrib.auth import authenticate, login, logout
 
 # Importa el sistema de mensajes de Django para mostrar notificaciones al usuario.
 from django.contrib import messages
-from .forms import SignUpForm, AddRecordForm # Importa el formulario de registro personalizado definido en forms.py.
+from .forms import SignUpForm, AddRecordForm, UserUpdateForm # Importa los formularios personalizados definidos en forms.py.
+from django.contrib.auth.models import User # Importa el modelo User de Django para gestión de usuarios.
 
 
 # Aquí se deben crear las vistas de la aplicación.
@@ -115,3 +116,43 @@ def update_record(request, pk):
         messages.success(request, 'Error del usuario')
         return redirect ('home')
 
+# ======================== Gestión de Usuarios ========================
+
+def user_list(request):
+    if request.user.is_authenticated:
+        users = User.objects.all()
+        return render(request, 'user_list.html', {'users': users})
+    else:
+        messages.success(request, "No estás autenticado para ver esta página")
+        return redirect('home')
+
+def user_detail(request, pk):
+    if request.user.is_authenticated:
+        user_info = User.objects.get(id=pk)
+        return render(request, 'user_detail.html', {'user_info': user_info})
+    else:
+        messages.success(request, "No estás autenticado para ver esta página")
+        return redirect('home')
+
+def user_update(request, pk):
+    if request.user.is_authenticated:
+        current_user = User.objects.get(id=pk)
+        form = UserUpdateForm(request.POST or None, instance=current_user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "El usuario ha sido actualizado exitosamente")
+            return redirect('user_list')
+        return render(request, 'user_update.html', {'form': form, 'user_info': current_user})
+    else:
+        messages.success(request, "No estás autenticado para realizar esta acción")
+        return redirect('home')
+
+def user_delete(request, pk):
+    if request.user.is_authenticated:
+        user_to_delete = User.objects.get(id=pk)
+        user_to_delete.delete()
+        messages.success(request, "El usuario ha sido eliminado exitosamente")
+        return redirect('user_list')
+    else:
+        messages.success(request, "No estás autenticado para realizar esta acción")
+        return redirect('home')

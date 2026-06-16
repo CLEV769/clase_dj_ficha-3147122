@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>👥 Gestión de Usuarios</h1>
+    <a href="{% url 'register' %}" class="btn btn-success">➕ Agregar Usuario</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-success table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Usuario</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellido</th>
+          <th scope="col">Correo electrónico</th>
+          <th scope="col">Activo</th>
+          <th scope="col">Fecha de registro</th>
+          <th scope="col">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td>
+          <td>{{ u.username }}</td>
+          <td>{{ u.first_name }}</td>
+          <td>{{ u.last_name }}</td>
+          <td>{{ u.email }}</td>
+          <td>
+            {% if u.is_active %}
+              <span class="badge bg-success">Activo</span>
+            {% else %}
+              <span class="badge bg-danger">Inactivo</span>
+            {% endif %}
+          </td>
+          <td>{{ u.date_joined }}</td>
+          <td>
+            <a href="{% url 'user_detail' u.id %}" class="btn btn-sm btn-info">👁 Ver</a>
+            <a href="{% url 'user_update' u.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
+            <a href="{% url 'user_delete' u.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑 Eliminar</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <a href="{% url 'home' %}" class="btn btn-secondary">⬅ Volver al Inicio</a>
+</div>
+{% endblock %}

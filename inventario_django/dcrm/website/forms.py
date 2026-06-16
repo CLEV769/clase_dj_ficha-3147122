@@ -67,3 +67,14 @@ class AddRecordForm(forms.ModelForm):
     class Meta:
         model = Record
         exclude = ("user",)  # Excluye campos que no deben ser editados por el usuario
+
+#--------------------------Formulario para gestión de usuarios--------------------------------
+class UserUpdateForm(forms.ModelForm):
+    username = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Nombre de usuario","class":"form-control"}), label="")
+    first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Nombre","class":"form-control"}), label="")
+    last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Apellido","class":"form-control"}), label="")
+    email = forms.EmailField(required=True, widget=forms.widgets.EmailInput(attrs={"placeholder":"Correo electrónico","class":"form-control"}), label="")
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email')
