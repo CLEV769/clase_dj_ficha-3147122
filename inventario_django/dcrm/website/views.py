@@ -156,3 +156,18 @@ def user_delete(request, pk):
     else:
         messages.success(request, "No estás autenticado para realizar esta acción")
         return redirect('home')
+
+def add_user(request):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = SignUpForm(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "El usuario ha sido creado exitosamente")
+                return redirect('user_list')
+        else:
+            form = SignUpForm()
+        return render(request, 'add_user.html', {'form': form})
+    else:
+        messages.success(request, "No estás autenticado para realizar esta acción")
+        return redirect('home')
