@@ -130,3 +130,25 @@ STATICFILES_DIRS=[
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DEBUG = False
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '.loca.lt',
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.loca.lt',
+]
+
+#SECURE_SSL_REDIRECT = False
+
+#SESSION_COOKIE_SECURE = False
+#CSRF_COOKIE_SECURE = True
+#CSRF_COOKIE_SAMESITE = 'Lax'
+#CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_AGE = 180
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
