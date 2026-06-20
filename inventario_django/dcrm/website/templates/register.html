@@ -1,28 +1,39 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="container py-4">
-    <h2>📝 Registro de Usuario</h2>
-    <br/>
-    <form method="POST">
-        {% csrf_token %}
-        {% if form.errors %}
-            <div class="alert alert-danger">
-                Por favor corrige los errores a continuación.
+<div class="row justify-content-center py-5">
+  <div class="col-md-6">
+    <div class="card-dark">
+      <div class="card-header text-center" style="background:var(--bg-surface); border-bottom:1px solid var(--border-subtle); border-radius:12px 12px 0 0; padding:1.5rem;">
+        <h2 style="margin:0; font-size:1.4rem;">📝 Registro de Usuario</h2>
+      </div>
+      <div class="card-body" style="padding:2rem;">
+        <form method="POST">
+          {% csrf_token %}
+          {% if form.errors %}
+            <div class="alert alert-danger" style="background:rgba(255,77,77,0.1); border:1px solid rgba(255,77,77,0.25); color:#ff6b6b;">
+              Por favor corrige los errores a continuación.
             </div>
-        {% endif %}
-        {% for field in form %}
+          {% endif %}
+          {% for field in form %}
             <div class="mb-3">
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.help_text %}
-                    <small class="form-text text-muted">{{ field.help_text|safe }}</small>
-                {% endif %}
-                {% for error in field.errors %}
-                    <div class="text-danger"><small>{{ error }}</small></div>
-                {% endfor %}
+              {{ field }}
+              {% if field.help_text %}
+                <small class="form-text" style="color:var(--text-secondary); font-size:0.75rem;">{{ field.help_text|safe }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <div style="color:#ff6b6b; font-size:0.8rem;">{{ error }}</div>
+              {% endfor %}
             </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
+          {% endfor %}
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-accent">Registrar</button>
+          </div>
+        </form>
+        <div class="text-center mt-3">
+          <a href="{% url 'home' %}" class="link-accent" style="font-size:0.82rem;">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}

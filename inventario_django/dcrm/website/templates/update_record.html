@@ -1,16 +1,19 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row justify-content-center py-5">
-  <div class="col-lg-7 col-md-9">
-    <div class="card border-0 shadow">
-      <div class="card-header bg-dark text-white text-center py-3">
-        <h2>Actualizar Registro</h2>
+  <div class="col-md-6">
+    <div class="card-dark">
+      <div class="card-header text-center" style="background:var(--bg-surface); border-bottom:1px solid var(--border-subtle); border-radius:12px 12px 0 0; padding:1.2rem;">
+        <h2 style="margin:0; font-size:1.3rem;">✏️ Actualizar Registro</h2>
       </div>
-      <div class="card-body">
+      <div class="card-body" style="padding:2rem;">
         <form method="POST">
           {% csrf_token %}
           {{ form.as_p }}
-          <button type="submit" class="btn btn-warning">Actualizar</button>
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-warning-custom">Actualizar</button>
+            <a href="{% url 'home' %}" class="btn btn-outline-subtle">Cancelar</a>
+          </div>
         </form>
       </div>
     </div>

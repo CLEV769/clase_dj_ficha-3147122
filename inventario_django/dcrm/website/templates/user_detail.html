@@ -1,28 +1,61 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container py-5">
-  <h1 class="text-center mb-4">Detalles del Usuario</h1>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">{{ user_info.first_name }} {{ user_info.last_name }}</h5>
-      <p class="card-text"><strong>Nombre de usuario:</strong> {{ user_info.username }}</p>
-      <p class="card-text"><strong>Correo electrónico:</strong> {{ user_info.email }}</p>
-      <p class="card-text"><strong>Nombre:</strong> {{ user_info.first_name }}</p>
-      <p class="card-text"><strong>Apellido:</strong> {{ user_info.last_name }}</p>
-      <p class="card-text"><strong>Estado:</strong>
-        {% if user_info.is_active %}
-          <span class="badge bg-success">Activo</span>
-        {% else %}
-          <span class="badge bg-danger">Inactivo</span>
-        {% endif %}
-      </p>
-      <p class="card-text"><strong>Último inicio de sesión:</strong> {{ user_info.last_login }}</p>
-      <p class="card-text"><strong>Fecha de registro:</strong> {{ user_info.date_joined }}</p>
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card-dark">
+        <div class="card-header text-center" style="background:var(--bg-surface); border-bottom:1px solid var(--border-subtle); border-radius:12px 12px 0 0; padding:1.2rem;">
+          <h2 style="margin:0; font-size:1.3rem;">👤 Detalles del Usuario</h2>
+        </div>
+        <div class="card-body" style="padding:2rem;">
+          <h4 style="color:var(--accent); margin-bottom:1.5rem;">
+            {{ user_info.first_name }} {{ user_info.last_name }}
+          </h4>
+          <div class="row">
+            <div class="col-sm-6">
+              <p class="detail-label">Nombre de usuario</p>
+              <p class="detail-value">{{ user_info.username }}</p>
+            </div>
+            <div class="col-sm-6">
+              <p class="detail-label">Correo electrónico</p>
+              <p class="detail-value">{{ user_info.email }}</p>
+            </div>
+            <div class="col-sm-6">
+              <p class="detail-label">Nombre</p>
+              <p class="detail-value">{{ user_info.first_name }}</p>
+            </div>
+            <div class="col-sm-6">
+              <p class="detail-label">Apellido</p>
+              <p class="detail-value">{{ user_info.last_name }}</p>
+            </div>
+            <div class="col-sm-6">
+              <p class="detail-label">Estado</p>
+              <p class="detail-value">
+                {% if user_info.is_active %}
+                  <span class="badge-active">Activo</span>
+                {% else %}
+                  <span class="badge-inactive">Inactivo</span>
+                {% endif %}
+              </p>
+            </div>
+            <div class="col-sm-6">
+              <p class="detail-label">Último inicio de sesión</p>
+              <p class="detail-value">{{ user_info.last_login }}</p>
+            </div>
+            <div class="col-12">
+              <p class="detail-label">Fecha de registro</p>
+              <p class="detail-value">{{ user_info.date_joined }}</p>
+            </div>
+          </div>
+          <hr style="border-color:var(--border-subtle); margin:1.5rem 0;">
+          <div class="d-flex gap-2">
+            <a href="{% url 'user_list' %}" class="btn btn-outline-subtle">⬅ Volver</a>
+            <a href="{% url 'user_update' user_info.id %}" class="btn btn-warning-custom">✏️ Editar</a>
+            <a href="{% url 'user_delete' user_info.id %}" class="btn btn-danger-custom" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑 Eliminar</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<a href="{% url 'user_list' %}" class="btn btn-secondary">⬅ Volver</a>
-<a href="{% url 'user_delete' user_info.id %}" class="btn btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑 Eliminar</a>
-<a href="{% url 'user_update' user_info.id %}" class="btn btn-warning">✏️ Editar</a>
 {% endblock %}

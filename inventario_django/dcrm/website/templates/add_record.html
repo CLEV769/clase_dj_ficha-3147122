@@ -1,13 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="col-md-6 offset-md-3">
-  <h2>Crear Registro</h2>
-  <form method="POST" action="{% url 'add_record' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-<br/>
-    <button type="submit" class="btn btn-dark">Crear</button>
-    <a href="{% url 'home' %}" class="btn btn-secondary">Volver</a>
-  </form>
+<div class="row justify-content-center py-5">
+  <div class="col-md-6">
+    <div class="card-dark">
+      <div class="card-header text-center" style="background:var(--bg-surface); border-bottom:1px solid var(--border-subtle); border-radius:12px 12px 0 0; padding:1.2rem;">
+        <h2 style="margin:0; font-size:1.3rem;">➕ Crear Registro</h2>
+      </div>
+      <div class="card-body" style="padding:2rem;">
+        <form method="POST" action="{% url 'add_record' %}">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-accent">Crear</button>
+            <a href="{% url 'home' %}" class="btn btn-outline-subtle">Volver</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
