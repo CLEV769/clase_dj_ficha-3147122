@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Registro</h2>
-<form method="POST">
-    {% csrf_token %}
-    <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" class="form-control" id="username" name="username" required>
-    </div>
-    <div class="mb-3">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Registrar</button>
-</form>
+<div class="container py-4">
+    <h2>📝 Registro de Usuario</h2>
+    <br/>
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Por favor corrige los errores a continuación.
+            </div>
+        {% endif %}
+        {% for field in form %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text|safe }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <div class="text-danger"><small>{{ error }}</small></div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+</div>
 {% endblock %}

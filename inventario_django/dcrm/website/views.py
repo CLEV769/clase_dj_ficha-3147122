@@ -62,12 +62,8 @@ def register_user(request):# Esta función define la vista de registro de usuari
         form = SignUpForm(request.POST) # Crea una instancia del formulario de registro con los datos enviados.
         if form.is_valid(): # Verifica si el formulario es válido.
             form.save() # Guarda el nuevo usuario en la base de datos.
-            username = form.cleaned_data['username'] # Obtiene el nombre de usuario del formulario.
-            password = form.cleaned_data['password1'] # Obtiene la contraseña del formulario.
-            user = authenticate(username=username, password=password) # Autentica al nuevo usuario.
-            login(request, user) # Inicia sesión para el nuevo usuario.
-            messages.success(request, "You Have Registered!") # Muestra un mensaje de éxito al usuario.
-            return redirect('home') # Redirige a la página principal (home).
+            messages.success(request, "¡Registro exitoso! Ahora puedes iniciar sesión.")
+            return redirect('home') # Redirige al inicio de sesión.
     else:
         form = SignUpForm() # Si el método de la solicitud no es POST, crea una instancia vacía del formulario de registro.
     return render(request, 'register.html', {'form':form}) # Renderiza la plantilla 'register.html' y la retorna como respuesta HTTP.
