@@ -35,7 +35,7 @@
           </td>
           <td>{{ u.date_joined }}</td>
           <td>
-            <a href="{% url 'user_detail' u.id %}" class="btn btn-sm btn-info">👁 Ver</a>
+            <a href="{% url 'user_detail' u.id %}" class="btn btn-sm btn-dark">👁 Ver</a>
             <a href="{% url 'user_update' u.id %}" class="btn btn-sm btn-warning">✏️ Editar</a>
             <a href="{% url 'user_delete' u.id %}" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑 Eliminar</a>
           </td>

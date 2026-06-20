@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="col-md-6 offset-md-3">
-  <h2>Add Record</h2>
+  <h2>Crear Registro</h2>
   <form method="POST" action="{% url 'add_record' %}">
     {% csrf_token %}
     {{ form.as_p }}
 <br/>
-    <button type="submit" class="btn-secondary">Add Record</button>
-    <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+    <button type="submit" class="btn btn-dark">Crear</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Volver</a>
   </form>
 </div>
 {% endblock %}
