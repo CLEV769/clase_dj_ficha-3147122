@@ -165,9 +165,12 @@ def add_user(request):
                 form.save()
                 messages.success(request, "El usuario ha sido creado exitosamente")
                 return redirect('user_list')
+            else:
+                # Muestra exactamente qué campo falló y por qué
+                messages.error(request, f"Error en el formulario: {form.errors}")
         else:
             form = SignUpForm()
         return render(request, 'add_user.html', {'form': form})
     else:
-        messages.success(request, "No estás autenticado para realizar esta acción")
+        messages.error(request, "No estás autenticado para realizar esta acción")
         return redirect('home')
