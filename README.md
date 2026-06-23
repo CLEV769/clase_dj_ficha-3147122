@@ -1,6 +1,6 @@
 # 🚀 Django CRM
 
-Sistema CRM (Customer Relationship Management) desarrollado con Django y MySQL para la gestión de clientes y usuarios mediante un sistema de roles, interfaz moderna en modo oscuro y navegación dinámica.
+Sistema CRM desarrollado con Django y MySQL para la gestión de clientes y usuarios mediante un sistema de roles, interfaz moderna en modo oscuro y navegación dinámica.
 
 ---
 
