@@ -167,13 +167,6 @@
         color: rgba(255,255,255,0.3) !important;
       }
 
-      /* ─── Alert Messages ──────────────── */
-      .alert {
-        border-radius: 8px;
-        font-size: 0.88rem;
-        font-family: 'DM Mono', monospace;
-      }
-
       /* ─── Badges ──────────────────────── */
       .badge-active {
         background: rgba(126,255,160,0.15);
@@ -217,23 +210,200 @@
         font-size: 0.95rem;
         margin-bottom: 1rem;
       }
+
+      /* ─── Toast Notifications ────────── */
+      .toast-container-custom {
+        position: fixed;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .toast-custom {
+        min-width: 320px;
+        border-radius: 10px;
+        font-family: 'DM Mono', monospace;
+        font-size: 0.85rem;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        border: 1px solid var(--border-subtle);
+        backdrop-filter: blur(12px);
+        animation: toastSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .toast-custom.toast-success {
+        background: rgba(126,255,160,0.12);
+        border-left: 4px solid var(--accent);
+        color: var(--accent);
+      }
+      .toast-custom.toast-error {
+        background: rgba(255,77,77,0.12);
+        border-left: 4px solid #ff6b6b;
+        color: #ff6b6b;
+      }
+      .toast-custom .toast-body {
+        padding: 1rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .toast-custom .btn-close {
+        filter: invert(1);
+        opacity: 0.5;
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+      }
+      .toast-custom .btn-close:hover {
+        opacity: 1;
+      }
+      @keyframes toastSlideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes toastSlideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+      }
+
+      /* ─── SPA transitions ─────────────── */
+      #spa-content {
+        transition: opacity 0.25s ease;
+      }
+      #spa-content.spa-loading {
+        opacity: 0.4;
+      }
     </style>
   </head>
   <body>
     {% include 'navbar.html' %}
-    <div class="container">
-      <br/>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container-custom" id="toast-container">
       {% if messages %}
         {% for message in messages %}
-          <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          <div class="toast-custom {% if message.tags == 'error' %}toast-error{% else %}toast-success{% endif %}" role="alert">
+            <button type="button" class="btn-close" onclick="this.parentElement.style.animation='toastSlideOut 0.3s forwards'; setTimeout(()=>this.parentElement.remove(), 300)"></button>
+            <div class="toast-body">
+              {% if message.tags == 'error' %}⚠️{% else %}✅{% endif %}
+              {{ message }}
+            </div>
           </div>
         {% endfor %}
       {% endif %}
-      {% block content %}
-      {% endblock %}
     </div>
+
+    <div class="container">
+      <br/>
+      <div id="spa-content">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script>
+      // ─── Auto-dismiss toasts ─────────────────────────
+      document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.toast-custom').forEach((toast, i) => {
+          setTimeout(() => {
+            toast.style.animation = 'toastSlideOut 0.3s forwards';
+            setTimeout(() => toast.remove(), 300);
+          }, 4000 + (i * 500));
+        });
+      });
+
+      // ─── SPA Navigation ─────────────────────────────
+      function spaNavigate(url, pushState = true) {
+        const content = document.getElementById('spa-content');
+        content.classList.add('spa-loading');
+
+        fetch(url, {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newContent = doc.getElementById('spa-content');
+          const newToasts = doc.getElementById('toast-container');
+
+          if (newContent) {
+            content.innerHTML = newContent.innerHTML;
+          }
+
+          // Inject new toasts if any
+          if (newToasts && newToasts.children.length > 0) {
+            const container = document.getElementById('toast-container');
+            container.innerHTML = newToasts.innerHTML;
+            // Auto-dismiss new toasts
+            container.querySelectorAll('.toast-custom').forEach((toast, i) => {
+              // Re-attach close button handler
+              const closeBtn = toast.querySelector('.btn-close');
+              if (closeBtn) {
+                closeBtn.onclick = function() {
+                  toast.style.animation = 'toastSlideOut 0.3s forwards';
+                  setTimeout(() => toast.remove(), 300);
+                };
+              }
+              setTimeout(() => {
+                toast.style.animation = 'toastSlideOut 0.3s forwards';
+                setTimeout(() => toast.remove(), 300);
+              }, 4000 + (i * 500));
+            });
+          }
+
+          // Update navbar if it changed (e.g. after login/logout)
+          const newNav = doc.querySelector('.navbar');
+          const oldNav = document.querySelector('.navbar');
+          if (newNav && oldNav) {
+            oldNav.innerHTML = newNav.innerHTML;
+            attachSpaListeners();
+          }
+
+          if (pushState) {
+            history.pushState({}, '', url);
+          }
+
+          content.classList.remove('spa-loading');
+
+          // Re-attach SPA listeners on new content
+          attachSpaListeners();
+        })
+        .catch(() => {
+          // Fallback to normal navigation on error
+          window.location.href = url;
+        });
+      }
+
+      function attachSpaListeners() {
+        document.querySelectorAll('[data-spa]').forEach(link => {
+          link.removeEventListener('click', spaClickHandler);
+          link.addEventListener('click', spaClickHandler);
+        });
+      }
+
+      function spaClickHandler(e) {
+        e.preventDefault();
+        const url = this.getAttribute('href');
+        if (url && url !== '#') {
+          spaNavigate(url);
+        }
+      }
+
+      // Handle forms within SPA
+      function attachSpaForms() {
+        // Forms are handled normally (POST requires full reload for CSRF + redirects)
+      }
+
+      // Handle browser back/forward
+      window.addEventListener('popstate', () => {
+        spaNavigate(window.location.pathname, false);
+      });
+
+      // Initial attachment
+      document.addEventListener('DOMContentLoaded', attachSpaListeners);
+    </script>
   </body>
 </html>

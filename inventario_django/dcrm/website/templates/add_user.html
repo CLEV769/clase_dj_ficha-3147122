@@ -1,13 +1,12 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row justify-content-center py-5">
-  <div class="col-lg-7 col-md-9">
-    <div class="card border-0 shadow">
-      <div class="card-header bg-dark text-white text-center py-3">
-        <h2>➕ Agregar Nuevo Usuario</h2>
+  <div class="col-md-7">
+    <div class="card-dark">
+      <div class="card-header text-center" style="background:var(--bg-surface); border-bottom:1px solid var(--border-subtle); border-radius:12px 12px 0 0; padding:1.2rem;">
+        <h2 style="margin:0; font-size:1.3rem;">➕ Agregar Nuevo Usuario</h2>
       </div>
-      <div class="card-body">
-
+      <div class="card-body" style="padding:2rem;">
         <form method="POST" action="{% url 'add_user' %}">
           {% csrf_token %}
 
@@ -16,7 +15,7 @@
             {{ form.username }}
             {{ form.username.help_text|safe }}
             {% if form.username.errors %}
-              <div class="text-danger small">{{ form.username.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.username.errors }}</div>
             {% endif %}
           </div>
 
@@ -24,7 +23,7 @@
           <div class="mb-3">
             {{ form.first_name }}
             {% if form.first_name.errors %}
-              <div class="text-danger small">{{ form.first_name.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.first_name.errors }}</div>
             {% endif %}
           </div>
 
@@ -32,7 +31,7 @@
           <div class="mb-3">
             {{ form.last_name }}
             {% if form.last_name.errors %}
-              <div class="text-danger small">{{ form.last_name.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.last_name.errors }}</div>
             {% endif %}
           </div>
 
@@ -40,7 +39,7 @@
           <div class="mb-3">
             {{ form.email }}
             {% if form.email.errors %}
-              <div class="text-danger small">{{ form.email.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.email.errors }}</div>
             {% endif %}
           </div>
 
@@ -49,7 +48,7 @@
             {{ form.password1 }}
             {{ form.password1.help_text|safe }}
             {% if form.password1.errors %}
-              <div class="text-danger small">{{ form.password1.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.password1.errors }}</div>
             {% endif %}
           </div>
 
@@ -58,14 +57,14 @@
             {{ form.password2 }}
             {{ form.password2.help_text|safe }}
             {% if form.password2.errors %}
-              <div class="text-danger small">{{ form.password2.errors }}</div>
+              <div style="color:#ff6b6b; font-size:0.8rem;">{{ form.password2.errors }}</div>
             {% endif %}
           </div>
 
-          <br/>
-          <button type="submit" class="btn btn-success">Crear Usuario</button>
-          <a href="{% url 'user_list' %}" class="btn btn-secondary">Cancelar</a>
-
+          <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-accent">Crear Usuario</button>
+            <a href="{% url 'user_list' %}" class="btn btn-outline-subtle" data-spa>Cancelar</a>
+          </div>
         </form>
       </div>
     </div>

@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container py-5">
-  <div class="mb-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>👥 Gestión de Usuarios</h1>
+    <a href="{% url 'add_user' %}" class="btn btn-accent" data-spa>➕ Crear Usuario</a>
   </div>
 
   <div class="card-dark">
@@ -15,6 +16,7 @@
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Correo electrónico</th>
+            <th>Rol</th>
             <th>Estado</th>
             <th>Fecha de registro</th>
             <th>Acciones</th>
@@ -29,6 +31,17 @@
             <td>{{ u.last_name }}</td>
             <td>{{ u.email }}</td>
             <td>
+              {% if u.is_superuser %}
+                <span class="badge-active">superadmin</span>
+              {% elif u.groups.all.0.name == 'admin' %}
+                <span class="badge-active">admin</span>
+              {% elif u.groups.all.0.name == 'editor' %}
+                <span style="background:rgba(255,193,7,0.15); color:#ffc107; padding:0.35rem 0.75rem; border-radius:20px; font-size:0.75rem; font-weight:500;">editor</span>
+              {% else %}
+                <span style="background:rgba(100,149,237,0.15); color:#6495ed; padding:0.35rem 0.75rem; border-radius:20px; font-size:0.75rem; font-weight:500;">viewer</span>
+              {% endif %}
+            </td>
+            <td>
               {% if u.is_active %}
                 <span class="badge-active">Activo</span>
               {% else %}
@@ -38,8 +51,8 @@
             <td>{{ u.date_joined }}</td>
             <td>
               <div class="d-flex gap-1 flex-nowrap">
-                <a href="{% url 'user_detail' u.id %}" class="btn btn-outline-subtle btn-sm">👁</a>
-                <a href="{% url 'user_update' u.id %}" class="btn btn-warning-custom btn-sm">✏️</a>
+                <a href="{% url 'user_detail' u.id %}" class="btn btn-outline-subtle btn-sm" data-spa>👁</a>
+                <a href="{% url 'user_update' u.id %}" class="btn btn-warning-custom btn-sm" data-spa>✏️</a>
                 <a href="{% url 'user_delete' u.id %}" class="btn btn-danger-custom btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑</a>
               </div>
             </td>
@@ -51,7 +64,7 @@
   </div>
 
   <div class="mt-4">
-    <a href="{% url 'home' %}" class="btn btn-outline-subtle">⬅ Volver al Inicio</a>
+    <a href="{% url 'home' %}" class="btn btn-outline-subtle" data-spa>⬅ Volver al Inicio</a>
   </div>
 </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.validators import RegexValidator
 from .models import Record
 
 
@@ -71,11 +72,27 @@ class AddRecordForm(forms.ModelForm):
     first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Nombre", "class": "form-control"}), label="")
     last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Apellido", "class": "form-control"}), label="")
     email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Correo electrónico", "class": "form-control"}), label="")
-    phone = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Teléfono", "class": "form-control"}), label="")
+    phone = forms.CharField(
+        required=True,
+        validators=[RegexValidator(
+            regex=r'^\+?\d{7,15}$',
+            message='Teléfono inválido. Debe tener entre 7 y 15 dígitos (puede iniciar con +).'
+        )],
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Teléfono (ej: +573001234567)", "class": "form-control"}),
+        label=""
+    )
     Address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Dirección", "class": "form-control"}), label="")
     city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Ciudad", "class": "form-control"}), label="")
     state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Estado", "class": "form-control"}), label="")
-    zipcode = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder": "Código postal", "class": "form-control"}), label="")
+    zipcode = forms.CharField(
+        required=True,
+        validators=[RegexValidator(
+            regex=r'^\d{4,10}$',
+            message='Código postal inválido. Debe tener entre 4 y 10 dígitos numéricos.'
+        )],
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Código postal (ej: 110111)", "class": "form-control"}),
+        label=""
+    )
 
     class Meta:
         model = Record

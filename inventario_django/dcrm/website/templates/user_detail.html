@@ -29,6 +29,20 @@
               <p class="detail-value">{{ user_info.last_name }}</p>
             </div>
             <div class="col-sm-6">
+              <p class="detail-label">Rol</p>
+              <p class="detail-value">
+                {% if user_info.is_superuser %}
+                  <span class="badge-active">superadmin</span>
+                {% elif user_info.groups.all.0.name == 'admin' %}
+                  <span class="badge-active">admin</span>
+                {% elif user_info.groups.all.0.name == 'editor' %}
+                  <span style="background:rgba(255,193,7,0.15); color:#ffc107; padding:0.35rem 0.75rem; border-radius:20px; font-size:0.75rem;">editor</span>
+                {% else %}
+                  <span style="background:rgba(100,149,237,0.15); color:#6495ed; padding:0.35rem 0.75rem; border-radius:20px; font-size:0.75rem;">viewer</span>
+                {% endif %}
+              </p>
+            </div>
+            <div class="col-sm-6">
               <p class="detail-label">Estado</p>
               <p class="detail-value">
                 {% if user_info.is_active %}
@@ -49,8 +63,8 @@
           </div>
           <hr style="border-color:var(--border-subtle); margin:1.5rem 0;">
           <div class="d-flex gap-2">
-            <a href="{% url 'user_list' %}" class="btn btn-outline-subtle">⬅ Volver</a>
-            <a href="{% url 'user_update' user_info.id %}" class="btn btn-warning-custom">✏️ Editar</a>
+            <a href="{% url 'user_list' %}" class="btn btn-outline-subtle" data-spa>⬅ Volver</a>
+            <a href="{% url 'user_update' user_info.id %}" class="btn btn-warning-custom" data-spa>✏️ Editar</a>
             <a href="{% url 'user_delete' user_info.id %}" class="btn btn-danger-custom" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">🗑 Eliminar</a>
           </div>
         </div>

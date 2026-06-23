@@ -62,10 +62,22 @@
     .navbar-custom .navbar-toggler:focus {
       box-shadow: 0 0 0 2px #7effa044;
     }
+
+    .navbar-custom .badge-role {
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 10px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .badge-role-admin { background: rgba(126,255,160,0.15); color: #7effa0; }
+    .badge-role-editor { background: rgba(255,193,7,0.15); color: #ffc107; }
+    .badge-role-viewer { background: rgba(100,149,237,0.15); color: #6495ed; }
   </style>
 
   <div class="container-fluid navbar-custom">
-    <a class="navbar-brand" href="{% url 'home' %}">Django CMR</a>
+    <a class="navbar-brand" href="{% url 'home' %}" data-spa>Django CRM</a>
 
     <button
       class="navbar-toggler"
@@ -83,20 +95,40 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         {% if user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'user_list' %}">👥 Usuarios</a>
+          <a class="nav-link" href="{% url 'home' %}" data-spa>📋 Registros</a>
         </li>
+        {% if user.is_superuser or user.groups.all.0.name == 'admin' %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">🔒 Cerrar sesion</a>
+          <a class="nav-link" href="{% url 'user_list' %}" data-spa>👥 Usuarios</a>
+        </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}">🔒 Cerrar sesión</a>
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}">Inicio de sesion</a>
+          <a class="nav-link" href="{% url 'home' %}">Inicio de sesión</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'register' %}">📔 Registrar</a>
+          <a class="nav-link" href="{% url 'register' %}" data-spa>📔 Registrar</a>
         </li>
         {% endif %}
       </ul>
+
+      {% if user.is_authenticated %}
+      <span class="navbar-text" style="font-size:0.78rem; color:rgba(255,255,255,0.4);">
+        👤 {{ user.username }}
+        {% if user.is_superuser %}
+          <span class="badge-role badge-role-admin ms-1">superadmin</span>
+        {% elif user.groups.all.0.name == 'admin' %}
+          <span class="badge-role badge-role-admin ms-1">admin</span>
+        {% elif user.groups.all.0.name == 'editor' %}
+          <span class="badge-role badge-role-editor ms-1">editor</span>
+        {% else %}
+          <span class="badge-role badge-role-viewer ms-1">viewer</span>
+        {% endif %}
+      </span>
+      {% endif %}
     </div>
   </div>
 </nav>

@@ -5,7 +5,9 @@
   {% if user.is_authenticated %}
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1>🔎 Registros</h1>
-      <a href="{% url 'add_record' %}" class="btn btn-accent">➕ Crear Registro</a>
+      {% if user.is_superuser or user.groups.all.0.name == 'admin' or user.groups.all.0.name == 'editor' %}
+        <a href="{% url 'add_record' %}" class="btn btn-accent" data-spa>➕ Crear Registro</a>
+      {% endif %}
     </div>
 
     {% if records %}
@@ -36,7 +38,7 @@
               <td>{{ record.state }}</td>
               <td>{{ record.zipcode }}</td>
               <td>{{ record.created_at }}</td>
-              <td><a href="{% url 'record' record.id %}" class="link-accent">{{ record.id }}</a></td>
+              <td><a href="{% url 'record' record.id %}" class="link-accent" data-spa>{{ record.id }}</a></td>
             </tr>
             {% endfor %}
           </tbody>
@@ -73,7 +75,7 @@
               </div>
             </form>
             <div class="text-center mt-3">
-              <a href="{% url 'register' %}" class="link-accent" style="font-size:0.82rem;">¿No tienes cuenta? Regístrate</a>
+              <a href="{% url 'register' %}" class="link-accent" style="font-size:0.82rem;" data-spa>¿No tienes cuenta? Regístrate</a>
             </div>
           </div>
         </div>
